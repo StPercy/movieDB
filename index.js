@@ -6,6 +6,9 @@ const path = require('path');
 const movieRouter = require('./movie');
 
 const app = express();
+// Middleware & Uses
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
 app.get('/', (req, res) => {
@@ -13,8 +16,6 @@ app.get('/', (req, res) => {
 });
 
 // Middleware & Uses
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use('/movie', movieRouter);
 app.use(morgan('common', {immediate: true}))
