@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title Movie List
+    link(rel="stylesheet", href="style.css")
+  body
+    h1 Movie List
+    table
+      thead
+        tr
+          th Id
+          th Title
+          th Year
+          th
+          th
+      tbody
+        each movie in movies
+          tr
+            td= movie.id
+            td= movie.title
+            td= movie.year
+            td
+              a(href=`/movie/delete/${movie.id}`) DELETE
+            td
+              a(href=`/movie/form/${movie.id}`) EDIT
+    a(href="/movie/form") Add Movie
