@@ -1,0 +1,26 @@
+{
+  "name": "moviedb",
+  "version": "1.0.0",
+  "description": "a sample nodejs express app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "movie",
+    "database"
+  ],
+  "author": "StPercy",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.0",
+    "serve-favicon": "^2.5.0"
+  }
+}
