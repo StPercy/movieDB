@@ -6,6 +6,7 @@ const path = require('path');
 const movieRouter = require('./movie');
 
 const app = express();
+
 // Middleware & Uses
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
