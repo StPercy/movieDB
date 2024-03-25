@@ -7,6 +7,9 @@ const movieRouter = require('./movie');
 
 const app = express();
 
+// Set the view engine to pug
+app.set('view engine', 'pug');
+
 // Middleware & Uses
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));

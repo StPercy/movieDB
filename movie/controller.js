@@ -4,8 +4,9 @@ const form = require('./form');
 
 function listAction(req, res) {
     const movies = model.getAll();
-    const body = view(movies);
-    res.send(body);
+    res.render(__dirname + '/views/list', {  movies });
+    //const body = view(movies);
+    //res.send(body);
     console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
 }
 

@@ -1,0 +1,28 @@
+doctype html 
+html(lang="en")     
+    head 
+        meta(charset="UTF-8")
+        title Movie List 
+        link(rel="stylesheet", href="/style.css")
+    body 
+        h1 Movie List from Pug template 🐶
+        p my super duper movie list...
+        table 
+            thead 
+                tr 
+                    th Id 
+                    th Title 
+                    th Year 
+                    th  
+                    th
+            tbody 
+                - for(let movie of movies)
+                    tr 
+                        td #{movie.id}
+                        td #{movie.title} 
+                        td #{movie.year}
+                        td 
+                            a(href="/movie/delete/" + movie.id) Delete
+                        td 
+                            a(href="/movie/form/" + movie.id) Update 
+        a(href="/movie/form") Add Movie
