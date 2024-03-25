@@ -12,12 +12,5 @@ block content
                     th
             tbody 
                 - for(let movie of movies)
-                    tr 
-                        td #{movie.id}
-                        td #{movie.title} 
-                        td #{movie.year}
-                        td 
-                            a(href="/movie/delete/" + movie.id) Delete
-                        td 
-                            a(href="/movie/form/" + movie.id) Update 
+                    include ./list-item
         a(href="/movie/form") Add Movie
