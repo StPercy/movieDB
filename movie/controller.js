@@ -4,9 +4,8 @@ const form = require('./form');
 
 function listAction(req, res) {
     const movies = model.getAll();
-    const body = view(movies);
-    res.send(body);
-    console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
+    res.render(__dirname + '/views/list', { movies: movies }); // 1st Param: Name of Pug-Templates,2nd Param: an Object with data to be passed to the template
+    console.log('MVC implemented in my first MVC structureed APP 📀❤🎮');
 }
 
 function deleteAction(req, res) {

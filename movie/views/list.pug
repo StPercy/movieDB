@@ -5,7 +5,7 @@ html(lang="en")
     title Movie List
     link(rel="stylesheet", href="style.css")
   body
-    h1 Movie List
+    h1 Movie List from Pug🐶
     table
       thead
         tr
@@ -17,11 +17,11 @@ html(lang="en")
       tbody
         each movie in movies
           tr
-            td= movie.id
-            td= movie.title
+            td !{movie.id}
+            td #{movie.title}
             td= movie.year
             td
-              a(href=`/movie/delete/${movie.id}`) DELETE
+              a(href="/movie/delete/" + movie.id ) DELETE
             td
               a(href=`/movie/form/${movie.id}`) EDIT
     a(href="/movie/form") Add Movie
