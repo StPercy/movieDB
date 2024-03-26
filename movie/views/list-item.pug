@@ -1,8 +1,9 @@
-tr 
-    td #{movie.id}
-    td #{movie.title} 
-    td #{movie.year}
-    td 
-        a(href="/movie/delete/" + movie.id) Delete
-    td 
-        a(href="/movie/form/" + movie.id) Update 
+mixin listItem(movie)
+    tr 
+        td #{movie.id}
+        td #{movie.title} 
+        td #{movie.year}
+        td 
+            a(href="/movie/delete/" + movie.id) Delete
+        td 
+            a(href="/movie/form/" + movie.id) Update 

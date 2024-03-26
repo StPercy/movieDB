@@ -1,4 +1,5 @@
 extends ../../templates/base
+include ./list-item
 
 block content
         h1 Movie List from Pug template list.pug 🐶
@@ -12,5 +13,5 @@ block content
                     th
             tbody 
                 - for(let movie of movies)
-                    include ./list-item
+                    +listItem(movie)
         a(href="/movie/form") Add Movie
