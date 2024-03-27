@@ -4,9 +4,10 @@ const form = require('./form');
 
 function listAction(req, res) {
     const movies = model.getAll();
-    const body = view(movies);
-    res.send(body);
-    console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
+    res.render(__dirname + '/views/home.handlebars', {movie: movies[0] });
+    //const body = view(movies);
+    //res.send(body);
+    //console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
 }
 
 function deleteAction(req, res) {

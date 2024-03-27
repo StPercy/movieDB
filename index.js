@@ -3,9 +3,14 @@ const bodyParser = require('body-parser');
 const favicon = require('serve-favicon')
 const morgan = require('morgan');
 const path = require('path');
+const { engine } = require('express-handlebars');
 const movieRouter = require('./movie');
 
 const app = express();
+
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 // Middleware & Uses
 app.use(express.static(__dirname + '/public'));
