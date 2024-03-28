@@ -7,7 +7,13 @@ import expressHandlebars from 'express-handlebars';
 
 const app = express();
 
-app.engine('handlebars', expressHandlebars());
+app.engine('handlebars', 
+    expressHandlebars({
+        helpers: {
+            uc: data => data.toUpperCase(),
+        },
+    }),
+);
 app.set('view engine', 'handlebars');
 app.set('views', [`${dirname(fileURLToPath(import.meta.url))}/movie/views`]);
 
