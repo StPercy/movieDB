@@ -34,15 +34,13 @@ tbody tr:hover {
                 <th>Id</th>
                 <th>Title</th>
                 <th>Year</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {{#each movies}}
-            <tr>
-                <td>{{this.id}}</td>
-                <td>{{this.title}}</td>
-                <td>{{this.year}}</td>
-            </tr>
+            {{>listItem}}
             {{/each}}
         </tbody>
     </table>

@@ -1,10 +1,19 @@
+import handlebars from 'handlebars';
+import fs from 'fs';
 import { getAll, remove, get, save } from './model.js';
 import { render } from './view.js';
 import { render as form } from './form.js';
 
 export async function listAction(request, response) {
   const movies = await getAll();
-  response.render('list', { layout: false, movies });
+  //response.render('list', { layout: false, movies });
+  response.render('list', { layout: false, 
+    movies,
+    partials: {
+        listItem:handlebars.compile(fs.readFileSync('./movie/views/list-item.handlebars', 'utf8')
+        ),  
+    },
+});
 }
 
 export async function removeAction(request, response) {
