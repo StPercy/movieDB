@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+    border-spacing: 0;
+}
+
+th {
+    background-color: black;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: left;
+    padding: 5px;
+}
+
+td {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
+tbody tr:hover {
+    background-color: #ccc;
+}
+    </style>
+    <title>Handlebars Example</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each movies}}
+            <tr>
+                <td>{{this.id}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.year}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <a href="/movie/form/">Neu</a>
+</body>
+</html>

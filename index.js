@@ -1,32 +1,26 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const favicon = require('serve-favicon')
-const morgan = require('morgan');
-const path = require('path');
-const { engine } = require('express-handlebars');
-const movieRouter = require('./movie');
+import express from 'express';
+import morgan from 'morgan';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { router as movieRouter } from './movie/index.js';
+import expressHandlebars from 'express-handlebars';
 
 const app = express();
 
-app.engine('handlebars', engine());
+app.engine('handlebars', expressHandlebars());
 app.set('view engine', 'handlebars');
-app.set('views', './views');
+app.set('views', [`${dirname(fileURLToPath(import.meta.url))}/movie/views`]);
 
-// Middleware & Uses
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(`${dirname(fileURLToPath(import.meta.url))}/public`));
 
-// Routes
-app.get('/', (req, res) => {
-    res.redirect('/movie');
-});
+app.use(morgan('common', { immediate: true }));
 
-// Middleware & Uses
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/movie', movieRouter);
-app.use(morgan('common', {immediate: true}))
 
+app.get('/', (request, response) => response.redirect('/movie'));
 
 app.listen(8989, () => {
-    console.log('Server started on http://localhost:8989 🚀');
+  console.log('Server is listening to http://localhost:8989');
 });

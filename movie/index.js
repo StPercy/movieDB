@@ -1,11 +1,16 @@
-const express = require('express');
-const { listAction, deleteAction, formAction, saveAction } = require('./controller');
+import { Router } from 'express';
+import {
+  listAction,
+  removeAction,
+  formAction,
+  saveAction,
+} from './controller.js';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/', listAction);
-router.get('/delete/:id', deleteAction);
+router.get('/delete/:id', removeAction);
 router.get('/form/:id?', formAction);
 router.post('/save', saveAction);
 
-module.exports = router;
+export { router };

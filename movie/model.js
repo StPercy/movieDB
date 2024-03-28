@@ -12,32 +12,34 @@ let data = [
 ];
 
 function getNextId() {
-    return Math.max(...data.map(movie => movie.id)) + 1;
-}
-
-function insert(movie) {
+    return Math.max(...data.map((movie) => movie.id)) + 1;
+  }
+  
+  function insert(movie) {
     movie.id = getNextId();
     data.push(movie);
-}
-
-function update(movie) {
+  }
+  
+  function update(movie) {
     movie.id = parseInt(movie.id, 10);
-    const index = data.findIndex(item => item.id === movie.id); 
+    const index = data.findIndex((item) => item.id === movie.id);
     data[index] = movie;
-}
-
-module.exports = {
-    getAll() {
-        return data;
-    },
-    get(id) {
-        return data.find(movie => movie.id === id); // get function to get a movie from the list, works with the id of the movie
-    },
-    delete(id) {
-        data = data.filter(movie => movie.id !== id);
-    }, // delete function to delete a movie from the list, works with the id of the movie 
-       //and filters the movie with the id that is not equal to the id of the movie to be deleted
-    save(movie) {
-        movie.id === '' ? insert(movie) : update(movie);
-    }
-}
+  }
+  
+  export function getAll() {
+    return Promise.resolve(data);
+  }
+  
+  export function get(id) {
+    return Promise.resolve(data.find((movie) => movie.id === id));
+  }
+  
+  export function remove(id) {
+    data = data.filter((movie) => movie.id !== id);
+    return Promise.resolve();
+  }
+  
+  export function save(movie) {
+    movie.id === '' ? insert(movie) : update(movie);
+    return Promise.resolve();
+  }
