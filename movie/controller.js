@@ -3,38 +3,50 @@ const view = require('./view');
 const form = require('./form');
 
 function listAction(req, res) {
-    const movies = model.getAll();
-    res.render(__dirname + '/views/list', {  movies });
-    //const body = view(movies);
-    //res.send(body);
-    console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
+    model.getAll().then(
+        movies => {
+            res.render(__dirname + '/views/list', { movies });
+        },
+        error => res.send(error),
+    );
 }
 
 function deleteAction(req, res) {
     const id = parseInt(req.params.id, 10);
-    model.delete(id);
-    res.redirect('/movie');
+    model.delete(id).then(
+        () => res.redirect(req.baseUrl),
+        error => res.send(error),
+        );            
 }
 
 function formAction(req,res) {
-    let movie = { id: '', title: '', year: '' };
+   let movie = { id: '', title: '', year: '' };
     if (req.params.id) {
-        movie = model.get(parseInt(req.params.id, 10)); 
+        model
+            .get(parseInt(req.params.id, 10))
+            .then(movie => res.send(form(movie)), 
+            error => res.send(error));
+    } else {
+        const body = form(movie);
+        res.send(body);
     }
-
-    const body = form(movie);
-    res.send(body);
 }
 
+// save action 4 mysql db    
 function saveAction(req, res) {
     const movie = {
         id: req.body.id,
         title: req.body.title,
         year: req.body.year,
     };
-    console.log(movie); // Füge eine Konsolenausgabe hinzu, um das 'movie'-Objekt zu überprüfen
-    model.save(movie);
-    res.redirect('/movie');
+    model.save(movie).then(
+        () => {
+            res.redirect(req.baseUrl);
+        },
+        error => {
+            res.send(error);
+        }
+    );
 }
 
 
