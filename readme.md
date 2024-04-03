@@ -5,7 +5,7 @@
 ## Make it run:
 
 First install all the mysql stuff you need:
-[text](https://dev.mysql.com/downloads/file/?id=526407)
+[mysql download link](https://dev.mysql.com/downloads/file/?id=526407)
 
 Setup your mysql environment(workbench, shell, etc.)
 
