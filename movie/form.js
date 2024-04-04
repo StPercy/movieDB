@@ -1,4 +1,8 @@
 module.exports = function render(movie) {
+    const movieId = movie ? movie.id : '';
+    const movieTitle = movie ? movie.title : '';
+    const movieYear = movie ? movie.year : '';
+    
     return `
         <!DOCTYPE html>
         <html lang="en">
@@ -9,14 +13,14 @@ module.exports = function render(movie) {
             </head>
             <body>
                <form action="/movie/save" method="post">
-                    <input type="hidden" name="id" value="${movie.id}" />
+                    <input type="hidden" name="id" value="${movieId}" />
                     <div>
                         <label for="title">Titel:</label>
-                        <input type="text" id="title" name="title" value="${movie.title}" />
+                        <input type="text" id="title" name="title" value="${movieTitle}" />
                     </div>
                     <div>
                         <label for="year">Jahr:</label>
-                        <input type="text" id="year" name="year" value="${movie.year}" />
+                        <input type="text" id="year" name="year" value="${movieYear}" />
                     </div>
                     <div>
                         <button type="submit">Speichern</button>

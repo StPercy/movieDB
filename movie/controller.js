@@ -1,47 +1,58 @@
 const model = require('./model');
-const view = require('./view');
+//const view = require('./view');
 const form = require('./form');
 
-function listAction(req, res) {
-    const movies = model.getAll();
-    res.render(__dirname + '/views/list', {  movies });
-    //const body = view(movies);
-    //res.send(body);
-    console.log('MVC implemented in my first MVC structureed APP 📀👁‍🗨🎮');
+function listAction(request, response) {
+  model.getAll().then(
+    movies => {
+      response.render(__dirname + '/views/list', { movies });
+    },
+    error => response.send(error),
+  );
 }
 
-function deleteAction(req, res) {
-    const id = parseInt(req.params.id, 10);
-    model.delete(id);
-    res.redirect('/movie');
+function deleteAction(request, response) {
+  const id = parseInt(request.params.id, 10);
+  model
+    .delete(id)
+    .then(
+      () => response.redirect(request.baseUrl),
+      error => response.send(error),
+    );
 }
 
-function formAction(req,res) {
-    let movie = { id: '', title: '', year: '' };
-    if (req.params.id) {
-        movie = model.get(parseInt(req.params.id, 10)); 
-    }
+function formAction(request, response) {
+  let movie = { id: '', title: '', year: '' };
 
+  if (request.params.id) {
+    model
+      .get(parseInt(request.params.id, 10))
+      .then(movie => response.send(form(movie)), error => response.send(error));
+  } else {
     const body = form(movie);
-    res.send(body);
+    response.send(body);
+  }
 }
 
-function saveAction(req, res) {
-    const movie = {
-        id: req.body.id,
-        title: req.body.title,
-        year: req.body.year,
-    };
-    console.log(movie); // Füge eine Konsolenausgabe hinzu, um das 'movie'-Objekt zu überprüfen
-    model.save(movie);
-    res.redirect('/movie');
+function saveAction(request, response) {
+  const movie = {
+    id: request.body.id,
+    title: request.body.title,
+    year: request.body.year,
+  };
+  model.save(movie).then(
+    () => {
+      response.redirect(request.baseUrl);
+    },
+    error => {
+      response.send(error);
+    },
+  );
 }
-
 
 module.exports = {
-    listAction,
-    deleteAction,
-    formAction,
-    saveAction,
+  listAction,
+  deleteAction,
+  formAction,
+  saveAction,
 };
-
