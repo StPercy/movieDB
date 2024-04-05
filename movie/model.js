@@ -14,10 +14,11 @@ const Movies = sequelize.define(
     },
     title: {
       type: Sequelize.STRING,
-      defaultValue: 'Unknown title🐱‍👤',
+      defaultValue: 'UNIX IS 4 UNIX 🐱‍👤',
     },
     year: {
       type: Sequelize.INTEGER,
+      defaultValue: 1970,
     },
   },
   { timestamps: false }
@@ -42,13 +43,8 @@ module.exports = {
     
     // Konvertiere die Werte in die erwarteten Typen
     const id = movie.id ? parseInt(movie.id) : null; // Konvertiere die ID in eine Zahl oder behalte sie null
-    const title = movie.title ? String(movie.title) : 'Unknown title🐱‍👤'; // Verwende den Standardwert für den Titel, wenn keiner angegeben ist
-    const year = movie.year ? parseInt(movie.year) : null; // Konvertiere das Jahr in eine Zahl oder behalte es null
-
-    if (!year) {
-        console.error("Year must be provided.");
-        return Promise.reject("Year must be provided.");
-    }
+    const title = movie.title ? String(movie.title) : movie.title.defaultValue; // Verwende den Standardwert für den Titel, wenn keiner angegeben ist
+    const year = movie.year ? parseInt(movie.year) : movie.year.defaultValue; // Konvertiere das Jahr in eine Zahl oder behalte es null
 
     if (id) {
         return Movies.upsert({ id, title, year }); // upsert() ersetzt den Datensatz, wenn er existiert, oder fügt ihn ein, wenn er nicht existiert
