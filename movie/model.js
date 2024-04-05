@@ -1,91 +1,61 @@
-const sqlite = require('sqlite3');
-const db = new sqlite.Database('./movie.db');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'movie.db'
+});
 
-function getAll() {
-  return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM Movies';
-    db.all(query, (error, results) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
-
-function getOne(id) {
-  return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM Movies WHERE id = ?';
-    db.get(query, [id], (error, result) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}
-
-function insert(movie) {
-  return new Promise((resolve, reject) => {
-    const query = 'INSERT INTO Movies (title, year) VALUES (?, ?)';
-    db.run(query, [movie.title, movie.year], (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
-
-function update(movie) {
-  return new Promise((resolve, reject) => {
-    const query = 'UPDATE Movies SET title = ?, year = ? WHERE id = ?';
-    db.run(
-      query,
-      [movie.title, movie.year, movie.id],
-      (error, results) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(results);
-        }
-      },
-    );
-  });
-}
-
-function remove(id) {
-  return new Promise((resolve, reject) => {
-    const query = 'DELETE FROM Movies WHERE id = ?';
-    db.run(query, [id], (error, results) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(results);
-      }
-    });
-  });
-}
+const Movies = sequelize.define(
+  'Movies',
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    title: {
+      type: Sequelize.STRING,
+      defaultValue: 'Unknown title🐱‍👤',
+    },
+    year: {
+      type: Sequelize.INTEGER,
+    },
+  },
+  { timestamps: false }
+);
 
 module.exports = {
-  getAll,
+  getAll() {
+    return Movies.findAll();
+  },
   get(id) {
-    return getOne(id);
+    return Movies.findByPk(id);
   },
   delete(id) {
-    return remove(id);
+    return Movies.destroy({ where: { id } });
   },
   save(movie) {
-    if (!movie.id) {
-      return insert(movie);
-    } else {
-      return update(movie);
+    // Logge die empfangenen Daten um den Typ zu überprüfen:
+    console.log("Received movie object:", movie);
+    console.log("Type of id:", typeof movie.id);
+    console.log("Type of title:", typeof movie.title);
+    console.log("Type of year:", typeof movie.year);
+    
+    // Konvertiere die Werte in die erwarteten Typen
+    const id = movie.id ? parseInt(movie.id) : null; // Konvertiere die ID in eine Zahl oder behalte sie null
+    const title = movie.title ? String(movie.title) : 'Unknown title🐱‍👤'; // Verwende den Standardwert für den Titel, wenn keiner angegeben ist
+    const year = movie.year ? parseInt(movie.year) : null; // Konvertiere das Jahr in eine Zahl oder behalte es null
+
+    if (!year) {
+        console.error("Year must be provided.");
+        return Promise.reject("Year must be provided.");
     }
-  },
-};
+
+    if (id) {
+        return Movies.upsert({ id, title, year }); // upsert() ersetzt den Datensatz, wenn er existiert, oder fügt ihn ein, wenn er nicht existiert
+    } else {
+        return Movies.create({ title, year }); // create() fügt einen neuen Datensatz hinzu
+    }
+}
+
+
+}
