@@ -14,11 +14,31 @@ const Movies = sequelize.define(
     },
     title: {
       type: Sequelize.STRING,
-      defaultValue: 'UNIX IS 4 UNIX 🐱‍👤',
+      defaultValue: 'Unknown title🐱‍👤', // Standardwert für den Titel
+      allowNull: false, // Titel darf nicht null sein
+      validate: {
+        notEmpty: {
+          msg: 'Title cannot be empty'
+        }
+      }
     },
     year: {
       type: Sequelize.INTEGER,
-      defaultValue: 1970,
+      defaultValue: new Date().getFullYear(), // Standardwert für das Jahr
+      allowNull: false, // Jahr darf nicht null sein
+      validate: {
+        isInt: {
+          msg: 'Year must be an integer'
+        },
+        min: {
+          args: [1900], // Beispiel: Mindestwert für das Jahr
+          msg: 'Year must be greater than or equal to 1900'
+        },
+        max: {
+          args: [new Date().getFullYear()], // Beispiel: Aktuelles Jahr
+          msg: 'Year must be less than or equal to current year'
+        }
+      }
     },
   },
   { timestamps: false }
@@ -35,23 +55,24 @@ module.exports = {
     return Movies.destroy({ where: { id } });
   },
   save(movie) {
-    // Logge die empfangenen Daten um den Typ zu überprüfen:
-    console.log("Received movie object:", movie);
-    console.log("Type of id:", typeof movie.id);
-    console.log("Type of title:", typeof movie.title);
-    console.log("Type of year:", typeof movie.year);
-    
     // Konvertiere die Werte in die erwarteten Typen
     const id = movie.id ? parseInt(movie.id) : null; // Konvertiere die ID in eine Zahl oder behalte sie null
-    const title = movie.title ? String(movie.title) : movie.title.defaultValue; // Verwende den Standardwert für den Titel, wenn keiner angegeben ist
-    const year = movie.year ? parseInt(movie.year) : movie.year.defaultValue; // Konvertiere das Jahr in eine Zahl oder behalte es null
+    const title = String(movie.title).trim(); // Entferne führende und abschließende Leerzeichen
+    const year = movie.year ? parseInt(movie.year) : null; // Konvertiere das Jahr in eine Zahl oder behalte es null
 
-    if (id) {
-        return Movies.upsert({ id, title, year }); // upsert() ersetzt den Datensatz, wenn er existiert, oder fügt ihn ein, wenn er nicht existiert
-    } else {
-        return Movies.create({ title, year }); // create() fügt einen neuen Datensatz hinzu
-    }
-}
-
-
-}
+    // Führe Validierungen durch
+    return Movies.create({ title, year })
+      .then(createdMovie => {
+        // Rückgabe des erstellten Films oder Fehler, falls die Validierung fehlschlägt
+        return createdMovie;
+      })
+      .catch(error => {
+        // Behandle Validierungsfehler und gebe entsprechende Fehlermeldungen zurück
+        if (error.name === 'SequelizeValidationError') {
+          const errors = error.errors.map(err => err.message);
+          return Promise.reject(errors);
+        }
+        return Promise.reject(error);
+      });
+  }
+};
