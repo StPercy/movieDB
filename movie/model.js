@@ -14,7 +14,7 @@ const Movies = sequelize.define(
     },
     title: {
       type: Sequelize.STRING,
-      defaultValue: 'Unknown title🐱‍👤', // Standardwert für den Titel
+      defaultValue: 'UNIX IS 4 UNIX🐱‍👤', // Standardwert für den Titel
       allowNull: false, // Titel darf nicht null sein
       validate: {
         notEmpty: {
