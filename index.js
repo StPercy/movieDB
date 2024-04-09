@@ -1,9 +1,11 @@
 const express = require('express');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const favicon = require('serve-favicon')
-const morgan = require('morgan');
 const path = require('path');
+const { ensureLoggedIn } = require('connect-ensure-login');
 const movieRouter = require('./movie');
+const auth = require('./auth');
 
 const app = express();
 
@@ -14,6 +16,9 @@ app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Auth
+auth(app);
+
 // Routes
 app.get('/', (req, res) => {
     res.redirect('/movie');
@@ -23,6 +28,8 @@ app.get('/', (req, res) => {
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use('/movie', movieRouter);
 app.use(morgan('common', {immediate: true}))
+
+app.use('/movie', ensureLoggedIn('/login.html'), movieRouter);
 
 
 app.listen(8989, () => {
