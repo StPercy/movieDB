@@ -4,6 +4,8 @@ const sequelize = new Sequelize({
   storage: 'movie.db'
 });
 
+// Im Modell wird die Struktur der Tabelle definiert:
+
 const Movies = sequelize.define(
   'Movies',
   {
